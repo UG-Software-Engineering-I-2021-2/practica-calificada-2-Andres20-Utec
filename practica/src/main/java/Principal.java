@@ -41,21 +41,25 @@ public class Principal {
     }
     public float calculateGrades(final List<Pair<Integer, Float>> examsStudents, final boolean hasReachedMinimumClasses) {
         if (!examsStudents.isEmpty() && hasReachedMinimumClasses) {
-            boolean hasToIncreaseOneExtraPoint = false;
-            for (Map.Entry<Integer, List<Pair<Teacher, Boolean>>> yearlyTeachers : allYearsTeachers.entrySet()) {
-                if (yearToCalculate == yearlyTeachers.getKey()) {
-                    List<Pair<Teacher, Boolean>> teachers = yearlyTeachers.getValue();
-                    for (Pair<Teacher, Boolean> teacher : teachers) {
-                        if (teacher.second()) {
-                            hasToIncreaseOneExtraPoint = true;
-                        }
-                    }
-                }
-            }
-            return extracted(hasToIncreaseOneExtraPoint, getGradesSum(examsStudents), getGradesWeightSum(examsStudents));
+            return extracted(isHasToIncreaseOneExtraPoint(), getGradesSum(examsStudents), getGradesWeightSum(examsStudents));
         } else {
             return 0f;
         }
+    }
+
+    private boolean isHasToIncreaseOneExtraPoint() {
+        boolean hasToIncreaseOneExtraPoint = false;
+        for (Map.Entry<Integer, List<Pair<Teacher, Boolean>>> yearlyTeachers : allYearsTeachers.entrySet()) {
+            if (yearToCalculate == yearlyTeachers.getKey()) {
+                List<Pair<Teacher, Boolean>> teachers = yearlyTeachers.getValue();
+                for (Pair<Teacher, Boolean> teacher : teachers) {
+                    if (teacher.second()) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return hasToIncreaseOneExtraPoint;
     }
 
     private float extracted(boolean hasToIncreaseOneExtraPoint, float gradesSum, int gradesWeightSum) {
